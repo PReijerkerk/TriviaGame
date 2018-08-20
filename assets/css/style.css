@@ -1,0 +1,30 @@
+body {
+  background-image: url("../images/Hogwarts.jpg");
+  background-size: cover;
+  height: 100%;
+  width:100%;
+}
+
+.page-header {
+  border: 5px solid black;
+  border-radius: 20px;
+  background-color: white;
+}
+
+.col-centered {
+    float: none;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#game-instructions,
+#Timer,
+#questionDiv,
+#answerDiv,
+.correctAnswers,
+.incorrectAnswers,
+.btn {
+  border: 5px solid black;
+  border-radius: 20px;
+  background-color: white;
+}
