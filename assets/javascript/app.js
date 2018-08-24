@@ -111,6 +111,13 @@ $(".restart").on("click", function() {
     question(); 
 })
 
+//Next Question Button
+$(".nextQuestion").on("click", function() {
+    currentQuestion++;
+    timerNumber=30;
+    question();
+})
+
 
 
 
