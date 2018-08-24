@@ -105,8 +105,10 @@ $(".restart").on("click", function() {
     $("#answer1").empty();
     $("#answer2").empty();
     $("#answer3").empty();
+    currentQuestion = 0;
     stop();
     timerNumber= 30;
+    
     runTimer();
     question(); 
 })
@@ -116,6 +118,7 @@ $(".nextQuestion").on("click", function() {
     currentQuestion++;
     timerNumber=30;
     question();
+    runTImer();
 })
 
 
