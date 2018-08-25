@@ -4,10 +4,11 @@ var timerNumber = 30;
 var intervalID;
 var numCorrect = 0;
 var numIncorrect = 0;
-var numUnanswered = 0;
 var answers= [];
 var currentQuestion = 0;
 var running = false;
+var answerHolder = $("#answerHolder");
+var questionHolder = $("#question");
 //Objects to hold questions/ answer choices
 var trivia = [
     {
@@ -30,13 +31,13 @@ var trivia = [
 
     {
         question: "Which Quidditch team does Ron support?",
-        correctAnswer: "Chudley cannons",
+        correctAnswer: "Chudley Cannons",
         multChoice: ["Chudley Cannons", "Puddlemore United", "Wimbourne Wasps", "Tutshill Tornados"]
     },
 
     {
         question: "How many brothers and sisters does Ron have?",
-        correctAnswer: "six",
+        correctAnswer: "Six",
         multChoice: ["Two", "Ten", "Six", "Eight"]
     },
 
@@ -47,20 +48,17 @@ var trivia = [
     }
 ];
 //Function to write a question to html
-
 var question = function() {
-    if (currentQuestion <= 6) {
+    if (currentQuestion <= trivia.length -1) {
         $("#question").html(trivia[currentQuestion].question);
             //Displays the answers to the answer IDs
             answers = trivia[currentQuestion].multChoice;
-                $("#answer0").html(answers[0]);
-                $("#answer1").html(answers[1]);
-                $("#answer2").html(answers[2]);
-                $("#answer3").html(answers[3]);
+                for(var i = 0; i < answers.length; i++) {
+                var input = '<label class="label"><input type="radio" name="q' + currentQuestion + '" value="' + answers[i] + '" >'+ answers[i] +'</label>';
+                    answerHolder.append(input);
+                }
             }
 };
-
-question();
 
 //Start Button
 $(".start").on("click", function() {
@@ -85,10 +83,10 @@ function decrement() {
 
 //stops timer upon reaching 0 seconds remaining
     if(timerNumber === -1) {
-        numUnanswered++;
         stop();
         var correctA = trivia[currentQuestion].correctAnswer;
-        $("#answerDiv").html("Time has run out! The correct answer is: " +correctA);
+        $("#answerHolder").html("Time has run out! The correct answer is: " +correctA); 
+        handleAnswers();
     }
 }
 
@@ -99,27 +97,69 @@ function stop() {
 }
 
 //Restart button
+//calls the clearCurrent function
+//sets currentQuestion to index0; timerNumber back to 30 seconds; resets numCorrect and numIncorrect to 0; starts the timer and writes the question at index0
 $(".restart").on("click", function() {
-    $("#question").empty();
-    $("#answer0").empty();
-    $("#answer1").empty();
-    $("#answer2").empty();
-    $("#answer3").empty();
+    clearCurrent();
     currentQuestion = 0;
     stop();
     timerNumber= 30;
-    
+    numCorrect= 0;
+    numIncorrect = 0;
     runTimer();
     question(); 
 })
 
-//Next Question Button
-$(".nextQuestion").on("click", function() {
+//Submits the selected button from the form into the handleNextQ function
+$(".form").on("submit", handleNextQ) 
+
+// function that handles the nextQuestion button
+//prevents the page from reloading
+//handles the event and passes it into the handleAnswers function
+//increased the index of the currentQuestion var
+//resets timer to 30seconds
+//calls the clearCurrent function
+//calls the question function to display the next question and answers
+//Starts the timer decrement
+//If currentQuestion = 6 turns off the nextQuestion button; inputs the Game over html screen; stops the timer/ empties the timer html; hides the next question button;
+function handleNextQ(event) {
+    event.preventDefault();
+    handleAnswers(event);
     currentQuestion++;
     timerNumber=30;
+    clearCurrent();
     question();
-    runTImer();
-})
+    runTimer();
+    if (currentQuestion === trivia.length) {
+        $(".form").off("submit", handleNextQ);
+        $("#answerHolder").html("Thank you for playing! Try again for a better score.");
+        stop();
+        $("#timerHolder").empty();
+        $(".nextQ").hide();
+    }
+}
+//Function to clear both the answerHolder and questionHolder
+function clearCurrent() {
+    answerHolder.empty();
+    questionHolder.empty();
+}
+
+//Compares the value of the selected answer in the form and compares it to the correct answer for the question; if correct increments the numCorrect else increments the numIncorrect; displays both numCorrect and NumIncorrect to the html
+function handleAnswers(e) {
+    if(e.target['q'+currentQuestion].value === trivia[currentQuestion].correctAnswer) {
+        numCorrect++;
+    }
+    else {
+        numIncorrect++;
+    }
+    console.log("Correct: " + numCorrect);
+    console.log("Incorrect: " + numIncorrect);
+
+    $("#correct").html(numCorrect);
+    $("#incorrect").html(numIncorrect);
+}
+
+
 
 
 

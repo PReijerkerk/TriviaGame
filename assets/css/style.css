@@ -5,6 +5,10 @@ body {
   width:100%;
 }
 
+.label {
+  display: block;
+}
+
 .page-header {
   border: 5px solid black;
   border-radius: 20px;
