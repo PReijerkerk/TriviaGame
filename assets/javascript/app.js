@@ -86,7 +86,6 @@ function decrement() {
         stop();
         var correctA = trivia[currentQuestion].correctAnswer;
         $("#answerHolder").html("Time has run out! The correct answer is: " +correctA); 
-        handleAnswers();
     }
 }
 
@@ -106,6 +105,8 @@ $(".restart").on("click", function() {
     timerNumber= 30;
     numCorrect= 0;
     numIncorrect = 0;
+    $("#correct").html(numCorrect);
+    $("#incorrect").html(numIncorrect);
     runTimer();
     question(); 
 })
